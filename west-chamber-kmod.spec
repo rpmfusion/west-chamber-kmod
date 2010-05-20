@@ -3,7 +3,7 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-#define buildforkernels newest
+%define buildforkernels newest
 #define buildforkernels current
 #define buildforkernels akmods
 
@@ -13,7 +13,7 @@
 Name:		west-chamber-kmod
 Summary:	Kernel module (kmod) for west-chamber
 Version:	0.0.1
-Release:	4.%{?svndate}svn%{?dist}.5
+Release:	4.%{?svndate}svn%{?dist}.6
 License:	GPLv2+
 Group:		System Environment/Kernel
 URL:		http://code.google.com/p/scholarzhang/
@@ -78,6 +78,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu May 20 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.0.1-4.20100405svn.6
+- rebuild for new kernel
+
 * Mon May 17 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.0.1-4.20100405svn.5
 - rebuild for new kernel
 
