@@ -55,7 +55,7 @@ sed -i '/compat_xtables.o/d' extensions/Kbuild
 sed -i '/build_ipset/d' extensions/Kbuild
 
 # remove bundled files from xtables-addons
-rm -rf extensions/{compat*}
+rm -rf include extensions/compat* 
 
 cp -p %{SOURCE1} %{SOURCE2} %{SOURCE3} extensions/
 popd
