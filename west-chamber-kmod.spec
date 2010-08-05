@@ -3,8 +3,8 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%define buildforkernels newest
-#define buildforkernels current
+#define buildforkernels newest
+%define buildforkernels current
 #define buildforkernels akmods
 
 %define svndate 20100405
@@ -13,7 +13,7 @@
 Name:		west-chamber-kmod
 Summary:	Kernel module (kmod) for west-chamber
 Version:	0.0.1
-Release:	4.%{?svndate}svn%{?dist}.10
+Release:	5.%{?svndate}svn%{?dist}
 License:	GPLv2+
 Group:		System Environment/Kernel
 URL:		http://code.google.com/p/scholarzhang/
@@ -23,14 +23,16 @@ URL:		http://code.google.com/p/scholarzhang/
 #  svn export -r %{svnver} http://scholarzhang.googlecode.com/svn/trunk/west-chamber west-chamber-%{svndate}
 #  tar -cjvf west-chamber-%{svndate}.tar.bz2 west-chamber-%{svndate}
 Source0:	west-chamber-%{svndate}.tar.bz2
-Source11:	west-chamber-kmodtool-excludekernel-filterfile
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+# Header files extracted from xtables-addons 1.28
+Source1:	compat_xtables.h
+Source2:	compat_skbuff.h
+Source3:	compat_xtnu.h
 # get the needed BuildRequires (in parts depending on what we build for)
 BuildRequires:	%{_bindir}/kmodtool
 %{!?kernels:BuildRequires: buildsys-build-rpmfusion-kerneldevpkgs-%{?buildforkernels:%{buildforkernels}}%{!?buildforkernels:current}-%{_target_cpu} }
 
 # kmodtool does its magic here
-%{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{name} --filterfile %{SOURCE11} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null) }
+%{expand:%(kmodtool --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null) }
 
 %description
 West-chamber is extensions named after the famous Chinese ancient friction - 
@@ -43,14 +45,21 @@ the west-chamber package in order to make use of these modules.
 # error out if there was something wrong with kmodtool
 %{?kmodtool_check}
 # print kmodtool output for debugging purposes:
-kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} --filterfile %{SOURCE11} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
+kmodtool  --target %{_target_cpu} --repo rpmfusion --kmodname %{name} %{?buildforkernels:--%{buildforkernels}} %{?kernels:--for-kernels "%{?kernels}"} 2>/dev/null
 
 %setup -q -c -T -a 0
-#do not build bundled xtables-addons modules
+
 pushd west-chamber-%{svndate}
+# do not build bundled xtables-addons modules
 sed -i '/compat_xtables.o/d' extensions/Kbuild
 sed -i '/build_ipset/d' extensions/Kbuild
+
+# remove bundled files from xtables-addons
+rm -rf include extensions/compat* 
+
+cp -p %{SOURCE1} %{SOURCE2} %{SOURCE3} extensions/
 popd
+
 for kernel_version in %{?kernel_versions} ; do
 	cp -a west-chamber-%{svndate} _kmod_build_${kernel_version%%___*}
 done
@@ -59,14 +68,12 @@ done
 %build
 for kernel_version  in %{?kernel_versions} ; do
 	export XA_ABSTOPSRCDIR=${PWD}/_kmod_build_${kernel_version%%___*}
-	make %{?_smp_mflags} V=1 -C "${kernel_version##*___}" SUBDIRS=${PWD}/_kmod_build_${kernel_version%%___*}/extensions modules
+	make %{?_smp_mflags} V=1 -C "${kernel_version##*___}" M=${PWD}/_kmod_build_${kernel_version%%___*}/extensions modules
 done
 
 
 %install
-rm -rf %{buildroot}
 for kernel_version  in %{?kernel_versions} ; do
-	find _kmod_build_${kernel_version%%___*}/extensions -name "*.ko" -exec mv {} _kmod_build_${kernel_version%%___*}/extensions ";"
 	install -dm 755 %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}
 	install -pm 755 _kmod_build_${kernel_version%%___*}/extensions/*.ko %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}
 done
@@ -78,11 +85,8 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Tue Jul 27 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.0.1-4.20100405svn.10
-- rebuild for new kernel
-
-* Wed Jul 07 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.0.1-4.20100405svn.9
-- rebuild for new kernel
+* Thu Aug 05 2010 Chen Lei <supercyper@163.com> - 0.0.1-5.20100405svn
+- Renew header files to work with xtables-addons >= 1.27
 
 * Fri Jun 18 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.0.1-4.20100405svn.8
 - rebuild for new kernel
@@ -108,7 +112,8 @@ rm -rf %{buildroot}
 * Sun Apr 25 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.0.1-4.20100405svn.1
 - rebuild for new kernel
 
-* Thu Apr 15 2010 Caius 'kaio' Chance <kaio at fedoraproject.org> - 0.0.1-4.20100405svn-- Changed 'buildforkernels' to current.
+* Thu Apr 15 2010 Caius 'kaio' Chance <kaio at fedoraproject.org> - 0.0.1-4.20100405svn
+- Changed 'buildforkernels' to current.
 
 * Mon Apr 05 2010 Caius 'kaio' Chance <kaio at fedoraproject.org> - 0.0.1-3.20100405svn
 - svn 84
