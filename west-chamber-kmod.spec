@@ -7,13 +7,13 @@
 %define buildforkernels current
 #define buildforkernels akmods
 
-%define svndate 20100405
-%define svnver 84
+%define svndate 20101017
+%define svnver 105
 
 Name:		west-chamber-kmod
 Summary:	Kernel module (kmod) for west-chamber
 Version:	0.0.1
-Release:	5.%{?svndate}svn%{?dist}
+Release:	6.%{?svndate}svn%{?dist}
 License:	GPLv2+
 Group:		System Environment/Kernel
 URL:		http://code.google.com/p/scholarzhang/
@@ -23,7 +23,7 @@ URL:		http://code.google.com/p/scholarzhang/
 #  svn export -r %{svnver} http://scholarzhang.googlecode.com/svn/trunk/west-chamber west-chamber-%{svndate}
 #  tar -cjvf west-chamber-%{svndate}.tar.bz2 west-chamber-%{svndate}
 Source0:	west-chamber-%{svndate}.tar.bz2
-# Header files extracted from xtables-addons 1.28
+# Header files extracted from xtables-addons 1.30
 Source1:	compat_xtables.h
 Source2:	compat_skbuff.h
 Source3:	compat_xtnu.h
@@ -83,8 +83,10 @@ chmod u+x %{buildroot}/lib/modules/*/extra/*/*
 %clean
 rm -rf %{buildroot}
 
-
 %changelog
+* Thu Oct 28 2010 Chen Lei <supercyper@163.com> - 0.0.1-6.20101017svn
+- Renew header files to work with xtables-addons >= 1.30
+
 * Thu Aug 05 2010 Chen Lei <supercyper@163.com> - 0.0.1-5.20100405svn
 - Renew header files to work with xtables-addons >= 1.27
 
