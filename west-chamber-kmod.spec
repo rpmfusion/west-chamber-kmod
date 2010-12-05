@@ -13,7 +13,7 @@
 Name:		west-chamber-kmod
 Summary:	Kernel module (kmod) for west-chamber
 Version:	0.0.1
-Release:	6.%{?svndate}svn%{?dist}.1
+Release:	6.%{?svndate}svn%{?dist}.2
 License:	GPLv2+
 Group:		System Environment/Kernel
 URL:		http://code.google.com/p/scholarzhang/
@@ -84,6 +84,9 @@ chmod u+x %{buildroot}/lib/modules/*/extra/*/*
 rm -rf %{buildroot}
 
 %changelog
+* Sun Dec 05 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.0.1-6.20101017svn.2
+- rebuild for F-14 kernel
+
 * Mon Nov 01 2010 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.0.1-6.20101017svn.1
 - rebuild for F-14 kernel
 
