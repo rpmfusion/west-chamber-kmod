@@ -13,7 +13,7 @@
 Name:		west-chamber-kmod
 Summary:	Kernel module (kmod) for west-chamber
 Version:	0.0.1
-Release:	6.%{?svndate}svn%{?dist}.17
+Release:	6.%{?svndate}svn%{?dist}.18
 License:	GPLv2+
 Group:		System Environment/Kernel
 URL:		http://code.google.com/p/scholarzhang/
@@ -84,6 +84,9 @@ chmod u+x %{buildroot}/lib/modules/*/extra/*/*
 rm -rf %{buildroot}
 
 %changelog
+* Mon Jan 09 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.0.1-6.20101017svn.18
+- rebuild for updated kernel
+
 * Wed Jan 04 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.0.1-6.20101017svn.17
 - rebuild for updated kernel
 
