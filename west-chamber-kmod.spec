@@ -75,7 +75,7 @@ for kernel_version  in %{?kernel_versions} ; do
 	install -dm 755 %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}
 	install -pm 755 _kmod_build_${kernel_version%%___*}/extensions/*.ko %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}
 done
-chmod u+x %{buildroot}/lib/modules/*/extra/*/*
+chmod u+x %{buildroot}%{_prefix}/lib/modules/*/extra/*/*
 %{?akmod_install}
 
 %clean
