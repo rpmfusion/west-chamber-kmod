@@ -11,7 +11,7 @@
 Name:		west-chamber-kmod
 Summary:	Kernel module (kmod) for west-chamber
 Version:	0.0.1
-Release:	7.%{?svndate}svn%{?dist}.6
+Release:	7.%{?svndate}svn%{?dist}.7
 License:	GPLv2+
 Group:		System Environment/Kernel
 URL:		http://code.google.com/p/scholarzhang/
@@ -81,6 +81,9 @@ done
 rm -rf %{buildroot}
 
 %changelog
+* Sun Nov 25 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.0.1-7.20101017svn.7
+- Rebuilt for current f18 kernel
+
 * Sun Nov 25 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.0.1-7.20101017svn.6
 - Rebuilt for Fedora 18 Beta kernel
 
