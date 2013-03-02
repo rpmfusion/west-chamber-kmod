@@ -3,7 +3,7 @@
 # "buildforkernels newest" macro for just that build; immediately after
 # queuing that build enable the macro again for subsequent builds; that way
 # a new akmod package will only get build when a new one is actually needed
-%define buildforkernels newest
+%global buildforkernels newest
 
 %define svndate 20101017
 %define svnver 105
@@ -11,7 +11,7 @@
 Name:		west-chamber-kmod
 Summary:	Kernel module (kmod) for west-chamber
 Version:	0.0.1
-Release:	7.%{?svndate}svn%{?dist}.57
+Release:	7.%{?svndate}svn%{?dist}.58
 License:	GPLv2+
 Group:		System Environment/Kernel
 URL:		http://code.google.com/p/scholarzhang/
@@ -82,6 +82,9 @@ chmod u+x %{buildroot}%{_prefix}/lib/modules/*/extra/*/*
 rm -rf %{buildroot}
 
 %changelog
+* Sat Mar 02 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.0.1-7.20101017svn.58
+- Rebuilt for kernel
+
 * Tue Feb 26 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.0.1-7.20101017svn.57
 - Rebuilt for kernel
 
